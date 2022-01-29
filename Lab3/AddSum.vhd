@@ -4,10 +4,10 @@ USE ieee.numeric_std.all;
 
 ENTITY AddSum IS
 	PORT(
-		In_from_PC : IN UNSIGNED(63 DOWNTO 0);
-		In_from_ShiftR : IN UNSIGNED(63 DOWNTO 0);
+		In_from_PC : IN UNSIGNED(31 DOWNTO 0);
+		In_from_ShiftR : IN UNSIGNED(31 DOWNTO 0);
 		
-		Out_AddSum : OUT UNSIGNED(63 DOWNTO 0)
+		Out_AddSum : OUT UNSIGNED(31 DOWNTO 0)
 		);
 
 END AddSum;
