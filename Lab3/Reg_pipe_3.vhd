@@ -4,12 +4,12 @@ USE ieee.numeric_std.all;
 
 ENTITY Reg_pipe_3 IS
 	PORT(
-		In_reg : IN STD_LOGIC_VECTOR(137 DOWNTO 0);
+		In_reg : IN STD_LOGIC_VECTOR(107 DOWNTO 0);
 		
 		clk : IN STD_LOGIC;
 		load : IN STD_LOGIC;
 		
-		Out_reg : OUT STD_LOGIC_VECTOR(137 DOWNTO 0)
+		Out_reg : OUT STD_LOGIC_VECTOR(107 DOWNTO 0)
 		);
 
 END Reg_pipe_3;
