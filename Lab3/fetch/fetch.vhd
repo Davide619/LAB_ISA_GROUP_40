@@ -7,7 +7,7 @@ ENTITY fetch IS
      GENERIC(N : integer:=64);
      PORT (     CLK, RESET, PC_Src    : IN  STD_LOGIC;
 		MEM_OUT	              : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);			        
-		INS_ADD	              : OUT std_logic_vector(N-1 DOWNTO 0));	 
+		INS_ADD	              : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));	 
 	   
 END fetch;
 
