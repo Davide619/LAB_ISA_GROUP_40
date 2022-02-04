@@ -5,11 +5,9 @@ USE IEEE.NUMERIC_STD.ALL ;
 ENTITY fetch IS
      
      GENERIC(N : integer:=64);
-     PORT (     CLK           : IN  STD_LOGIC;
-                RESET	      : IN  STD_LOGIC;
-		MEM_OUT	      : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);	
-	    	PC_Src	      : IN  STD_LOGIC;			        
-		INS_ADD	      : OUT std_logic_vector(N-1 DOWNTO 0));	 
+     PORT (     CLK, RESET, PC_Src    : IN  STD_LOGIC;
+		MEM_OUT	              : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);			        
+		INS_ADD	              : OUT std_logic_vector(N-1 DOWNTO 0));	 
 	   
 END fetch;
 
@@ -19,7 +17,7 @@ ARCHITECTURE BEH OF fetch IS
 	
 	
 	
-     SIGNAL  PC_IN, ADDER_OUT,PC_OUT : STD_LOGIC_VECTOR(N-1 DOWNTO 0);
+     SIGNAL  PC_IN, ADDER_OUT,PC_OUT, ADDER_INP2 : STD_LOGIC_VECTOR(N-1 DOWNTO 0);
      COMPONENT ADDER IS
      GENERIC(N : integer:=64);
      PORT(
@@ -55,10 +53,11 @@ ARCHITECTURE BEH OF fetch IS
 
 BEGIN
 
-ADDER:    ADDER GENERIC MAP(N => 64) PORT MAP(PC_OUT, std_logic_vector(TO_UNSIGNED(4,N)),ADDER_OUT);
+ADDER_INP2 <= STD_LOGIC_VECTOR(TO_UNSIGNED(4,N));
+ADDER_INSIDE:    ADDER GENERIC MAP(N => 64) PORT MAP(PC_OUT, ADDER_INP2, ADDER_OUT);
 MUX  :    Mux2to1_64b   PORT MAP(ADDER_OUT, MEM_OUT, PC_Src, PC_IN); 
 PC   :    Regn  GENERIC MAP(N => 64) PORT MAP(PC_IN, CLK, RESET, PC_OUT);       
 
 INS_ADD <= PC_OUT;
 
-END BEH;    
+END BEH;   
