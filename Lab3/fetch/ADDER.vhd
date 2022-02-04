@@ -19,7 +19,7 @@ ARCHITECTURE BEH OF ADDER IS
 
 BEGIN
 
-C <= std_logic_vector(unsigned(A) + unsigned(B));
+C <= STD_LOGIC_VECTOR(UNSIGNED(A) + UNSIGNED(B));
 
 
 END ARCHITECTURE;
