@@ -13,8 +13,7 @@ ENTITY reg_files IS
            DATA_IN          : IN STD_LOGIC_VECTOR(63 DOWNTO 0);     -----write data
            DATA_OUT1        : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);    -----read  data
            DATA_OUT2        : OUT STD_LOGIC_VECTOR(63 DOWNTO 0);    -----read  data
-           CLK              : IN STD_LOGIC;
-           RST_n            : IN std_logic);
+           CLK, RST_n       : IN std_logic);
 
 END reg_files;
 
