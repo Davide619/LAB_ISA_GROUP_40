@@ -7,9 +7,9 @@ ENTITY fetch IS
      GENERIC(N : integer:=64);
      PORT (     CLK           : IN  STD_LOGIC;
                 RESET	      : IN  STD_LOGIC;
-		MEM_OUT	      : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);	-- from PC_OUT
-	    	PC_Src	      : IN  STD_LOGIC;			        -- from CONTROL
-		PC_ADD	      : OUT std_logic_vector(N-1 DOWNTO 0));	-- to INSTRUCTION MEMORY AND DECODER  
+		MEM_OUT	      : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);	
+	    	PC_Src	      : IN  STD_LOGIC;			        
+		INS_ADD	      : OUT std_logic_vector(N-1 DOWNTO 0));	 
 	   
 END fetch;
 
@@ -59,6 +59,6 @@ ADDER:    ADDER GENERIC MAP(N => 64) PORT MAP(PC_OUT, std_logic_vector(TO_UNSIGN
 MUX  :    Mux2to1_64b   PORT MAP(ADDER_OUT, MEM_OUT, PC_Src, PC_IN); 
 PC   :    Regn  GENERIC MAP(N => 64) PORT MAP(PC_IN, CLK, RESET, PC_OUT);       
 
-PC_ADD <= PC_OUT;
+INS_ADD <= PC_OUT;
 
 END BEH;    
