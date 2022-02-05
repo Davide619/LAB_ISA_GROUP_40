@@ -49,7 +49,7 @@ module tb_Risc_V_Lite ();
 	.Data(read_data),
 	.ProgramCounter(PC),
 	.Address(address),
-	  .WriteData(write_data),
+	.WriteData(write_data),
 	.MemRead(mem_read),
 	.MemWrite(mem_write)
 	); 
