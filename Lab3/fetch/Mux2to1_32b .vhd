@@ -12,9 +12,9 @@ ENTITY Mux2to1_32b IS
 		Out_mux : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 		);
 
-END Mux2to1_64b;
+END Mux2to1_32b;
 
-ARCHITECTURE mux OF Mux2to1_64b IS
+ARCHITECTURE mux OF Mux2to1_32b IS
 BEGIN
 process(Ctrl)
 begin
