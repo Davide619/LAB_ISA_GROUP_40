@@ -68,6 +68,20 @@ ARCHITECTURE rtl OF RISC-V-lite_processor IS
 	-- Program Counter Input
 	SIGNAL InProgramCounter : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	
+	-- fetch component
+	COMPONENT fetch IS
+		GENERIC(N : integer:=64);
+		PORT (     -- clock, reset and Program Counter input selector
+	   	CLK, RESET, PC_Src    : IN  STD_LOGIC;
+      	   	-- jump address
+    	   	JMP_ADD               : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);
+      
+	   	-- Program Counter input
+      	   	PC_IN   : BUFFER STD_LOGIC_VECTOR(N-1 DOWNTO 0);	
+	   	-- Instruction Memory address (PC output)
+	   	INS_ADD : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));
+	END COMPONENT;
+	
 	-- Control Unit
 	COMPONENT CU IS
 		PORT(
@@ -186,6 +200,13 @@ ARCHITECTURE rtl OF RISC-V-lite_processor IS
 	END COMPONENT;
 	
 BEGIN
+	-- fetch component (contains Program Counter)
+	fetch: fetch GENERIC MAP (N => 32)
+			PORT MAP (CLK => Clk, RESET => Rst, PC_Src => PipeReg4(0),
+				  JMP_ADD => PipeReg3(37 DOWNTO 6),
+				  PC_IN => PipeReg4(103 DOWNTO 72),
+				  INS_ADD => ProgramCounter);
+	
 	-- PIPELINE: 1st stage
 	pipe1_1: Regn GENERIC MAP (N => 32)
 					PORT MAP (R => Instruction, Clock => Clk,
@@ -200,7 +221,7 @@ BEGIN
 						MemtoReg => MemtoReg, ALUOp => ALUOp,
 						MemWrite => MemWrite, ALUSrc => ALUSrc,
 						RegWrite => RegWrite);
-	
+		
 	-- immediate value Generator
 	ImmediateGenerator: ImmGen PORT MAP (inst => Instruction_pipe1,
 													imm => Immediate);
