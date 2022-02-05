@@ -2,14 +2,14 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
 
-ENTITY Mux2to1_64b IS
+ENTITY Mux2to1_32b IS
 	PORT(
-		In1 : IN STD_LOGIC_VECTOR(63 DOWNTO 0);
-		In2 : IN STD_LOGIC_VECTOR(63 DOWNTO 0);
+		In1 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		In2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		
 		Ctrl : IN STD_LOGIC;
 		
-		Out_mux : OUT STD_LOGIC_VECTOR(63 DOWNTO 0)
+		Out_mux : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 		);
 
 END Mux2to1_64b;
