@@ -25,5 +25,11 @@ begin  -- beh
     end if;
     wait for Ts/2;
   end process;
+      
+  PROCESS
+  BEGIN
+        rst <= '0';
+        rst <= '1' AFTER Ts/4;
+  END PROCESS;
 
 end beh;
