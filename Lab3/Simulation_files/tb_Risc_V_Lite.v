@@ -4,6 +4,7 @@
 module tb_Risc_V_Lite (); 
 
    wire CLK_i;
+   wire RST_i;
    wire EOF;
    wire mem_read;
    wire mem_write;
@@ -16,6 +17,7 @@ module tb_Risc_V_Lite ();
 
    clk_gen CG(
 	.CLK(CLK_i)
+	.rst(RST_i)
 	); 
 
    Mem32x32 DMem(
@@ -40,5 +42,17 @@ module tb_Risc_V_Lite ();
 	.DataIN_to_mem(I_from_file),
 	.End_file(EOF)
 	); 
+  RISCVlite_processor RP(
+	.Clk(CLK_i),
+	.Rst(RST_i), 
+	.Instruction,
+	.Data,
+	.ProgramCounter,
+	.Address,
+	.WriteData,
+	.MemRead,
+	.MemWrite
+	); 
+  
 
 endmodule	   
