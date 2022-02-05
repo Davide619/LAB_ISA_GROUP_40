@@ -236,7 +236,7 @@ BEGIN
 						R(63 DOWNTO 32) => rs1,
 						R(31 DOWNTO 0) => ProgramCounter_pipe1,
 						D => PipeReg2);
-						
+	
 	pipe2_controls: Regn GENERIC MAP (N => 9)
 								PORT MAP (Clock => Clk, Reset => Rst,
 									R(8 DOWNTO 6) => ALUSrc & ALUOp,
