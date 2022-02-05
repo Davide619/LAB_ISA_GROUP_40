@@ -31,7 +31,7 @@ module tb_Risc_V_Lite ();
 
    InstructionMem IMem(
 	.Clock(CLK_i),
-	.Address_from_PC(address),
+	   .Address_from_PC(PC),
 	.WR(EOF),
 	.Instr_from_file(I_from_file),
 	.Instruction(instruction)
@@ -45,13 +45,13 @@ module tb_Risc_V_Lite ();
   RISCVlite_processor RP(
 	.Clk(CLK_i),
 	.Rst(RST_i), 
-	.Instruction,
-	.Data,
-	.ProgramCounter,
-	.Address,
-	.WriteData,
-	.MemRead,
-	.MemWrite
+	.Instruction(instruction),
+	.Data(read_data),
+	.ProgramCounter(PC),
+	.Address(address),
+	.WriteData(w_data),
+	.MemRead(mem_read),
+	.MemWrite(mem_write)
 	); 
   
 
