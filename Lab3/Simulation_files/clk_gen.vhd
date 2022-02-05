@@ -6,6 +6,7 @@ use ieee.std_logic_unsigned.all;
 entity clk_gen is
   port (
     CLK     : buffer std_logic);
+    rst     : out std_logic;
 end clk_gen;
 
 architecture beh of clk_gen is
@@ -14,7 +15,7 @@ architecture beh of clk_gen is
   
   
 begin  -- beh
-
+  
   process
   begin  -- process
     if (CLK = 'U') then
