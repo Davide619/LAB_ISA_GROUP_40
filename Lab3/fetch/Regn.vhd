@@ -22,7 +22,7 @@ BEGIN
 		IF (Reset = '0') THEN -- asynchronous reset
 			Q <= (OTHERS => '0');
 		ELSIF (Clock'EVENT AND Clock = '1') THEN -- positive edge detection
-			Q <= R(22 DOWNTO 0);
+			Q <= R(N-1 DOWNTO 0);
 		END IF;
 	END PROCESS;
 	
