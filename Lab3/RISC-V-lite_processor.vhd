@@ -96,6 +96,19 @@ ARCHITECTURE rtl OF RISC-V-lite_processor IS
 			RegWrite : OUT STD_LOGIC); -- register file WR signal
 	END COMPONENT;
 	
+	-- Register File
+	ENTITY reg_files IS
+  		PORT (
+           	REG_WR           : IN STD_LOGIC;                         -----regwrite 
+           	REG1             : IN STD_LOGIC_VECTOR(4 DOWNTO 0);      -----read  register 1
+           	REG2             : IN STD_LOGIC_VECTOR(4 DOWNTO 0);      -----read  register 2
+           	WR_REG           : IN STD_LOGIC_VECTOR(4 DOWNTO 0);      -----write register 
+           	INP              : IN STD_LOGIC_VECTOR(31 DOWNTO 0);     -----write data
+           	OUT1             : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);    -----read  data
+           	OUT2             : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);    -----read  data
+           	CLK, RST_n       : IN std_logic);
+	END COMPONENT;
+		
 	-- ALU Control Unit
 	COMPONENT ALU_CU IS
 		PORT(
@@ -202,7 +215,7 @@ ARCHITECTURE rtl OF RISC-V-lite_processor IS
 BEGIN
 	-- fetch component (contains Program Counter)
 	fetch: fetch GENERIC MAP (N => 32)
-			PORT MAP (CLK => Clk, RESET => Rst, PC_Src => PipeReg4(0),
+			PORT MAP (CLK => Clk, RESET => Rst, PC_Src => PCSrc,
 				  JMP_ADD => PipeReg3(37 DOWNTO 6),
 				  PC_IN => PipeReg4(103 DOWNTO 72),
 				  INS_ADD => ProgramCounter);
@@ -221,7 +234,14 @@ BEGIN
 						MemtoReg => MemtoReg, ALUOp => ALUOp,
 						MemWrite => MemWrite, ALUSrc => ALUSrc,
 						RegWrite => RegWrite);
-		
+	-- Register File
+	RegFile: reg_files PORT MAP (
+			REG_WR => PipeReg4(0),
+			REG1 => Instruction_pipe1, REG2 => Instruction_pipe1,
+			WR_REG => PipeReg4(71 DOWNTO 67), INP => WriteData,
+			OUT1 => rs1, OUT2 => rs2,
+			CLK => Clk, RST_n => Rst);
+
 	-- immediate value Generator
 	ImmediateGenerator: ImmGen PORT MAP (inst => Instruction_pipe1,
 													imm => Immediate);
