@@ -11,23 +11,35 @@ ENTITY Mem32x32 IS
 		  WriteData     : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		  
 		  ReadData      : OUT STD_LOGIC_VECTOR(31 DOWNTO 0));
-END Mem32x32
+END Mem32x32;
 
 ARCHITECTURE behaviour OF Mem32x32 IS
 
-	TYPE mem_def IS ARRAY(0 TO 4294967296) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
+	TYPE mem_def IS ARRAY(4194304 TO 4194391) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
 	SIGNAL Mem : mem_def;
 
 BEGIN
-	
-	mem: PROCESS(Clock)
+	memory: PROCESS(Clock)
+		VARIABLE int_address : INTEGER := 0;
 	BEGIN
+		int_address := TO_INTEGER(UNSIGNED(Address));
 		IF (Clock'EVENT AND Clock = '1') THEN
-		
 			IF WR = '1' THEN
-				Mem(TO_INTEGER(UNSIGNED(Address))) <= WriteData;
-			ELSIF RD = '0' THEN
-				ReadData <= Mem(TO_INTEGER(UNSIGNED(Address)));
+				Mem(int_address) <= WriteData(31 DOWNTO 24);
+				int_address := int_address + 1;
+				Mem(int_address) <= WriteData(23 DOWNTO 16);
+				int_address := int_address + 1;
+				Mem(int_address) <= WriteData(15 DOWNTO 8);
+				int_address := int_address + 1;
+				Mem(int_address) <= WriteData(7 DOWNTO 0);
+			ELSIF RD = '1' THEN
+				ReadData(31 DOWNTO 24) <= Mem(int_address);
+				int_address := int_address + 1;
+				ReadData(23 DOWNTO 16) <= Mem(int_address);
+				int_address := int_address + 1;
+				ReadData(15 DOWNTO 8) <= Mem(int_address);
+				int_address := int_address + 1;
+				ReadData(7 DOWNTO 0) <= Mem(int_address);
 			END IF;
 		
 		END IF;

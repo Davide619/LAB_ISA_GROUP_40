@@ -1,36 +1,61 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_textio.all;
+
+library std;
+use std.textio.all;
 
 -- 32x32 bit memory
 
 ENTITY InstructionMem IS
 	PORT(
 		  Clock : IN STD_LOGIC;
-		  Address_from_PC       : IN UNSIGNED(31 DOWNTO 0);
-		  WR 		: IN STD_LOGIC;
-		  Instr_from_file      : IN UNSIGNED(31 DOWNTO 0);
-		  
+		  Address_from_PC       : IN STD_LOGIC_VECTOR(31 DOWNTO 0);  
 		  Instruction      : OUT STD_LOGIC_VECTOR(31 DOWNTO 0));
-END InstructionMem
+END InstructionMem;
 
 ARCHITECTURE behaviour OF InstructionMem IS
 
-	TYPE mem_def IS ARRAY(0 TO 4294967296) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
+	TYPE mem_def IS ARRAY(4194304 TO 4194391) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
 	SIGNAL Mem : mem_def;
+	constant Tc : time := 10 ns;
 
 BEGIN
-	
-	mem: PROCESS(Clock)
+	init: PROCESS
+		file fp_in : text open READ_MODE is "../instruction_set.hex";
+    		variable line_in : line;
+		VARIABLE Address : INTEGER := 4194304; -- 4*16^5 (0x00400000)
+		VARIABLE Instr_from_file : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	BEGIN
+		IF NOT ENDFILE(fp_in) THEN
+			readline(fp_in, line_in);
+			hread(line_in, Instr_from_file);
+			Mem(Address)   <= Instr_from_file(31 DOWNTO 24);
+			Address := Address + 1;
+			Mem(Address) <= Instr_from_file(23 DOWNTO 16);
+			Address := Address + 1;
+			Mem(Address) <= Instr_from_file(15 DOWNTO 8);
+			Address := Address + 1;
+			Mem(Address) <= Instr_from_file(7 DOWNTO 0);
+			Address := Address + 1;
+		END IF;
+		WAIT FOR Tc/100;
+	END PROCESS;
+
+	memory: PROCESS(Clock)
+		VARIABLE add_from_PC_int : INTEGER := 0;
+	BEGIN
+		add_from_PC_int := TO_INTEGER(UNSIGNED(Address_from_PC));
 		IF (Clock'EVENT AND Clock = '1') THEN
-		
-			IF WR = '1' THEN
-				Mem(TO_INTEGER(UNSIGNED(Address))) <= Instr_from_file;
-			ELSIF RD = '0' THEN
-				Instruction <= Mem(TO_INTEGER(UNSIGNED(Address)));
-			END IF;
-		
+			Instruction(31 DOWNTO 24) <= Mem(add_from_PC_int);
+			add_from_PC_int := add_from_PC_int + 1;
+			Instruction(23 DOWNTO 16) <= Mem(add_from_PC_int);
+			add_from_PC_int := add_from_PC_int + 1;
+			Instruction(15 DOWNTO 8) <= Mem(add_from_PC_int);
+			add_from_PC_int := add_from_PC_int + 1;
+			Instruction(7 DOWNTO 0) <= Mem(add_from_PC_int);
 		END IF;
 	END PROCESS;
 	

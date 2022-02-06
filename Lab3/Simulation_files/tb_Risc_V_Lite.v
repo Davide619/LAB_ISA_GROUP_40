@@ -16,7 +16,7 @@ module tb_Risc_V_Lite ();
    wire [31:0] instruction;
 
    clk_gen CG(
-	.CLK(CLK_i)
+	.CLK(CLK_i),
 	.rst(RST_i)
 	); 
 
@@ -31,17 +31,18 @@ module tb_Risc_V_Lite ();
 
    InstructionMem IMem(
 	.Clock(CLK_i),
-	   .Address_from_PC(PC),
-	.WR(EOF),
-	.Instr_from_file(I_from_file),
+	.Address_from_PC(PC),
+	//.WR(EOF),
+	//.Instr_from_file(I_from_file),
 	.Instruction(instruction)
 	); 
 
-  data_maker DM(
-	.Clk(CLK_i),
-	.DataIN_to_mem(I_from_file),
-	.End_file(EOF)
-	); 
+  //data_maker DM(
+	//.Clk(CLK_i),
+	//.DataIN_to_mem(I_from_file),
+	//.End_file(EOF)
+	//); 
+
   RISCVlite_processor RP(
 	.Clk(CLK_i),
 	.Rst(RST_i), 
