@@ -1,7 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 
--- 2xN bit multiplexer
+-- 2xNbit multiplexer
 
 ENTITY mux2to1xN IS
 	GENERIC (N : INTEGER := 32);
@@ -22,6 +22,7 @@ BEGIN
 		CASE s IS
 			WHEN '0' => M <= IN0;
 			WHEN '1' => M <= IN1;
+			WHEN OTHERS => M <= IN0;
 		END CASE;
 	END PROCESS;
 	

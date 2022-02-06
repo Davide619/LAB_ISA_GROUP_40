@@ -46,7 +46,7 @@ PROCESS(In_from_ALU_CU)
 BEGIN
 	CASE In_from_ALU_CU IS
 		WHEN "0010" =>
-			Out_tmp <= "1000"; --ADD
+			Out_tmp <= "1010"; --ADD
 		WHEN "0011" =>
 			Out_tmp <= "0001"; --XOR
 		WHEN "0000" =>
@@ -56,7 +56,7 @@ BEGIN
 		WHEN "0100" =>
 			Out_tmp <= "0110"; --SHIFT
 		WHEN OTHERS =>
-			Out_tmp <= "1000"; --ADD
+			Out_tmp <= "1010"; --ADD
 	END CASE;
 	
 end process;

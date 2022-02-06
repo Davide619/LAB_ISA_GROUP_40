@@ -15,15 +15,20 @@ ENTITY RISCVlite_processor IS
 			Data        : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 			
 			-- to Instruction memory
-			ProgramCounter : BUFFER STD_LOGIC_VECTOR(31 DOWNTO 0);
+			ProgramCounter : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 			-- to Data memory
-			Address        : BUFFER STD_LOGIC_VECTOR(31 DOWNTO 0);
+			Address        : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 			WriteData      : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 			MemRead        : OUT STD_LOGIC;
 			MemWrite       : OUT STD_LOGIC);
 END RISCVlite_processor;
 
 ARCHITECTURE rtl OF RISCVlite_processor IS
+	
+	-- OUTPUT
+	SIGNAL ProgramCounter_buff : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	SIGNAL Address_buff        : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	
 	-- PIPELINE: 1st stage
 	SIGNAL Instruction_pipe1    : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	SIGNAL ProgramCounter_pipe1 : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -226,14 +231,14 @@ BEGIN
 			PORT MAP (CLK => Clk, RESET => Rst, PC_Src => PCSrc,
 				  JMP_ADD => PipeReg3(37 DOWNTO 6),
 				  PC_IN => InProgramCounter,
-				  INS_ADD => ProgramCounter);
+				  INS_ADD => ProgramCounter_buff);
 	
 	-- PIPELINE: 1st stage
 	pipe1_1: Regn GENERIC MAP (N => 32)
 					PORT MAP (R => Instruction, Clock => Clk,
 									Reset => Rst, Q => Instruction_pipe1);
 	pipe1_2: Regn GENERIC MAP (N => 32)
-					PORT MAP (R => ProgramCounter, Clock => Clk,
+					PORT MAP (R => ProgramCounter_buff, Clock => Clk,
 									Reset => Rst, Q => ProgramCounter_pipe1);
 	
 	-- Control Unit
@@ -259,7 +264,8 @@ BEGIN
 	pipe2: Regn GENERIC MAP (N => 169)
 					PORT MAP (Clock => Clk, Reset => Rst,
 						R(168 DOWNTO 164) => Instruction_pipe1(11 DOWNTO 7),
-						R(163 DOWNTO 160) => Instruction_pipe1(30) & Instruction_pipe1(14 DOWNTO 12),
+						R(163) => Instruction_pipe1(30),
+						R(162 DOWNTO 160) => Instruction_pipe1(14 DOWNTO 12),
 						R(159 DOWNTO 96) => Immediate,
 						R(95 DOWNTO 64) => rs2,
 						R(63 DOWNTO 32) => rs1,
@@ -268,9 +274,13 @@ BEGIN
 	
 	pipe2_controls: Regn GENERIC MAP (N => 9)
 								PORT MAP (Clock => Clk, Reset => Rst,
-									R(8 DOWNTO 6) => ALUSrc & ALUOp,
-									R(5 DOWNTO 3) => MemWrite_cu & MemRead_cu & Branch,
-									R(2 DOWNTO 0) => MemtoReg & RegWrite,
+									R(8) => ALUSrc,
+									R(7 DOWNTO 6) => ALUOp,
+									R(5) => MemWrite_cu,
+									R(4) => MemRead_cu,
+									R(3) => Branch,
+									R(2 DOWNTO 1) => MemtoReg,
+									R(0) => RegWrite,
 									Q => PipeReg2_ctrl);
 					
 	-- ALU Control Unit
@@ -310,7 +320,7 @@ BEGIN
 	-- PIPELINE: 4th stage
 	pipe4: Reg_pipe_4 PORT MAP (In_reg_pipe4(103 DOWNTO 72) => InProgramCounter,
 								In_reg_pipe4(71 DOWNTO 67) => PipeReg3(107 DOWNTO 103),
-								In_reg_pipe4(66 DOWNTO 35) => PipeReg3(102 DOWNTO 71),
+								In_reg_pipe4(66 DOWNTO 35) => PipeReg3(70 DOWNTO 39),
 								In_reg_pipe4(34 DOWNTO 3) => Data,
 								In_reg_pipe4(2 DOWNTO 0) => PipeReg3(2 DOWNTO 0),
 								clk => Clk, rst => Rst, Out_reg_pipe4 => PipeReg4);
@@ -319,7 +329,10 @@ BEGIN
 	WriteDataMux: Mux3to1_32b PORT MAP(PipeReg4(66 DOWNTO 35), PipeReg4(34 DOWNTO 3),
 								PipeReg4(103 DOWNTO 72), PipeReg4(2 DOWNTO 1), WriteData_reg);
 								
-	-- Outputs declaration (to Data memory)
+	-- Outputs declaration
+	-- to Instruction memory
+	ProgramCounter <= ProgramCounter_buff;
+	-- to Data memory
 	Address <= PipeReg3(70 DOWNTO 39);
 	WriteData <= PipeReg3(102 DOWNTO 71);
 	MemRead <= PipeReg3(4);
