@@ -5,10 +5,10 @@ module tb_Risc_V_Lite ();
 
    wire CLK_i;
    wire RST_i;
-   wire EOF;
+   //wire EOF;
    wire mem_read;
    wire mem_write;
-   wire [31:0] I_from_file;
+   //wire [31:0] I_from_file;
    wire [31:0] address;
    wire [31:0] write_data;
    wire [31:0] read_data;
@@ -21,17 +21,17 @@ module tb_Risc_V_Lite ();
 	); 
 
    Mem32x32 DMem(
+	.CLK(CLK_i),
 	.WR(mem_write),
 	.RD(mem_read),
-	.Clock(CLK_i),
 	.Address(address),
 	.WriteData(write_data),
 	.ReadData(read_data)
 	);
 
    InstructionMem IMem(
-	.Clock(CLK_i),
 	.Address_from_PC(PC),
+	.CLK(CLK_i),
 	//.WR(EOF),
 	//.Instr_from_file(I_from_file),
 	.Instruction(instruction)

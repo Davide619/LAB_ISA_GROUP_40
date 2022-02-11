@@ -19,6 +19,7 @@ begin  -- beh
   process
   begin  -- process
     if (CLK = 'U') then
+		WAIT FOR Ts/100;
       CLK <= '0';
     else
       CLK <= not(CLK);
