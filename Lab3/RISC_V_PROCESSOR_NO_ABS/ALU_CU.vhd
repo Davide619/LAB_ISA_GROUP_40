@@ -58,8 +58,8 @@ BEGIN
 			-- BEQ
 			WHEN "01" => ALUCtrl <= "0110";
 			
-			-- AUIPC, LUI, JAL, default case
-			WHEN OTHERS => ALUCtrl <= "1111";
+			-- LUI, JAL, AUIPC, default case
+			WHEN OTHERS => ALUCtrl <= "0010";
 		
 		END CASE;
 	END PROCESS;

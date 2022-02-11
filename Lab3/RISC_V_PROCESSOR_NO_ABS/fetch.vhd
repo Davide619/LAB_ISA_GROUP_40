@@ -11,9 +11,9 @@ PORT (     -- clock, reset and Program Counter input selector
     	   JMP_ADD               : IN  STD_LOGIC_VECTOR(N-1 DOWNTO 0);
       
 	   -- Program Counter input
-      	   PC_IN   : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0);	
+		PC_plus4   : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0);	
 	   -- Instruction Memory address (PC output)
-	   INS_ADD : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));	 
+	   INS_ADD     : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0));	 
 	   
 END fetch;
 
@@ -70,7 +70,7 @@ MUX  :    Mux2to1_32b   PORT MAP(ADDER_OUT, JMP_ADD, PC_Src, PC_IN_buff);
 ---INSIDE PROGRAM COUNTER
 ProgCnt   :    PC  PORT MAP(PC_IN_buff, CLK, RESET, PC_OUT);       
 
-PC_IN <= PC_IN_buff;
+PC_plus4 <= ADDER_OUT;
 INS_ADD <= PC_OUT;
 
 END BEH;  

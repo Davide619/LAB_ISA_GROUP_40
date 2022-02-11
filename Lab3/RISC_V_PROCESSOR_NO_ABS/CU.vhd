@@ -14,7 +14,7 @@ ENTITY CU IS
 			MemtoReg : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); -- selects WriteReg source
 			ALUOp    : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); -- controls ALUControlUnit
 			MemWrite : OUT STD_LOGIC; -- data memory WR signal
-			ALUSrc   : OUT STD_LOGIC; -- selects ALU 2nd operand
+			ALUSrc   : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); -- selects ALU 2nd operand
 			RegWrite : OUT STD_LOGIC); -- register file WR signal
 END CU;
 
@@ -32,7 +32,7 @@ BEGIN
 									MemtoReg <= "01";
 									ALUOp <= "00";
 									MemWrite <= '0';
-									ALUSrc <= '1';
+									ALUSrc <= "01";
 									RegWrite <= '1';
 									
 			-- ADDI, ANDI, SRAI
@@ -41,16 +41,16 @@ BEGIN
 									MemtoReg <= "00";
 									ALUOp <= "10";
 									MemWrite <= '0';
-									ALUSrc <= '1';
+									ALUSrc <= "01";
 									RegWrite <= '1';
 									
 			-- AUIPC
 			WHEN "0010111" => Branch <= '0';
 									MemRead <= '0';
-									MemtoReg <= "10";
+									MemtoReg <= "00";
 									ALUOp <= "11";
 									MemWrite <= '0';
-									ALUSrc <= '1';
+									ALUSrc <= "11";
 									RegWrite <= '1';
 									
 			-- SW
@@ -59,7 +59,7 @@ BEGIN
 									MemtoReg <= "00";
 									ALUOp <= "00";
 									MemWrite <= '1';
-									ALUSrc <= '0';
+									ALUSrc <= "00";
 									RegWrite <= '0';
 
 			-- ADD, SLT, XOR
@@ -68,16 +68,16 @@ BEGIN
 									MemtoReg <= "00";
 									ALUOp <= "10";
 									MemWrite <= '0';
-									ALUSrc <= '0';
+									ALUSrc <= "00";
 									RegWrite <= '1';
 			
 			-- LUI
 			WHEN "0110111" => Branch <= '0';
-									MemRead <= '1';
-									MemtoReg <= "10";
+									MemRead <= '0';
+									MemtoReg <= "11";
 									ALUOp <= "11";
 									MemWrite <= '0';
-									ALUSrc <= '1';
+									ALUSrc <= "01";
 									RegWrite <= '1';
 									
 			-- BEQ
@@ -86,7 +86,7 @@ BEGIN
 									MemtoReg <= "00";
 									ALUOp <= "01";
 									MemWrite <= '0';
-									ALUSrc <= '0';
+									ALUSrc <= "00";
 									RegWrite <= '0';
 					
 			-- JAL
@@ -95,7 +95,7 @@ BEGIN
 									MemtoReg <= "10";
 									ALUOp <= "11";
 									MemWrite <= '0';
-									ALUSrc <= '1';
+									ALUSrc <= "01";
 									RegWrite <= '1';
 									
 			-- default case
@@ -104,7 +104,7 @@ BEGIN
 									MemtoReg <= "00";
 									ALUOp <= "11";
 									MemWrite <= '0';
-									ALUSrc <= '0';
+									ALUSrc <= "00";
 									RegWrite <= '0';
 			
 		END CASE;
