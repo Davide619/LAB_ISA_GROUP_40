@@ -351,7 +351,7 @@ BEGIN
 							R => PipeReg2(127 DOWNTO 96), Q => Immediate_pipe3);
 	
 	-- Branching AND
-	PCSrc <= PipeReg3(3) AND PipeReg3(38);
+	branch_AND: PCSrc <= PipeReg3(3) AND PipeReg3(38);
 	
 	-- PIPELINE: 4th stage
 	pipe4_0: Regn GENERIC MAP (N => 32)

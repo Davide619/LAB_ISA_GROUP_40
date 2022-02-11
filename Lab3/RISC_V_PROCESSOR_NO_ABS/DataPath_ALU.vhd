@@ -96,13 +96,17 @@ DUT6: Mux2to1_64b_ALU PORT MAP(int7, int8, out3(63), out5);
 DUT7: Mux32to1_64b_ALU PORT MAP(In_from_Rs1, In_from_Rs2(4 DOWNTO 0), out6);
 
 --zero flag
-PROCESS(out3)
+PROCESS(out3, Add_Sub_n)
 BEGIN
-	if(out3 = "0000000000000000000000000000000000000000000000000000000000000000") THEN
-		Zero_flag <= '0';
-	else
+	IF Add_Sub_n = '0' THEN
+		if(out3 = "0000000000000000000000000000000000000000000000000000000000000000") THEN
+			Zero_flag <= '1';
+		else
+			Zero_flag <= '0';
+		end if;
+	ELSE
 		Zero_flag <= '1';
-	end if;
+	END IF;
 end process;
 
 

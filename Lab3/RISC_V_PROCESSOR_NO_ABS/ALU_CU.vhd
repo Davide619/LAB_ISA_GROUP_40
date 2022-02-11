@@ -35,7 +35,7 @@ BEGIN
 					ALUCtrl <= "0000";
 					
 				-- SRAI
-				ELSIF (from_inst = "0110") THEN
+				ELSIF (from_inst = "1101") THEN
 					ALUCtrl <= "0100";
 					
 				-- ADD
@@ -48,7 +48,7 @@ BEGIN
 					
 				-- XOR
 				ELSIF (from_inst = "0100") THEN
-					ALUCtrl <= "0100";
+					ALUCtrl <= "0011";
 					
 				-- default case:
 				ELSE
