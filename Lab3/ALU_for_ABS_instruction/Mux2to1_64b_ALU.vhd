@@ -19,9 +19,9 @@ BEGIN
 process(Ctrl, In1, In2)
 begin
 	if(Ctrl = '1') then
-		Out_mux <= In2;
-	else
 		Out_mux <= In1;
+	else
+		Out_mux <= In2;
 	end if;
 end process;
 
