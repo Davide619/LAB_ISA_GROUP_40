@@ -38,8 +38,6 @@ COMPONENT DataPath_ALU IS
 
 END COMPONENT;
 
-SIGNAL mod_norm_tmp, add_sub_n_tmp : STD_LOGIC;
-SIGNAL ctrl_tmp : STD_LOGIC_VECTOR(2 DOWNTO 0);
 SIGNAL Out_tmp : STD_LOGIC_VECTOR(4 DOWNTO 0);
 
 BEGIN
@@ -49,7 +47,7 @@ PROCESS(In_from_ALU_CU)
 BEGIN
 	CASE In_from_ALU_CU IS
 		WHEN "0010" =>
-			Out_tmp <= "01000"; --ADD
+			Out_tmp <= "01010"; --ADD
 		WHEN "0011" =>
 			Out_tmp <= "00001"; --XOR
 		WHEN "0000" =>
