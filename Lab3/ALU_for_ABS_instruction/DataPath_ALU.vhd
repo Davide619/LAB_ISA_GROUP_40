@@ -107,10 +107,14 @@ DUT7: Mux32to1_64b_ALU PORT MAP(In_from_Rs1, In_from_Rs2(4 DOWNTO 0), out6);
 --zero flag
 PROCESS(out3)
 BEGIN
-	if(out3 = "0000000000000000000000000000000000000000000000000000000000000000") THEN
-		Zero_flag <= '0';
+	if Add_Sub_n = '0' THEN
+		if(out3 = "0000000000000000000000000000000000000000000000000000000000000000") THEN
+			Zero_flag <= '1';
+		else
+			Zero_flag <= '0';
+		end if;
 	else
-		Zero_flag <= '1';
+			Zero_flag <= '1';
 	end if;
 end process;
 
